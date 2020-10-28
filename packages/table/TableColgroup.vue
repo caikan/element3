@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import useTableState from './useTableState'
+import { useTableState } from './utils'
 export default {
   name: 'ElTableColgroup',
 

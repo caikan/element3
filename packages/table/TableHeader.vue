@@ -13,7 +13,7 @@
 
 <script>
 import TableColgroup from './TableColgroup'
-import useTableState from './useTableState'
+import { useTableState } from './utils'
 export default {
   components: { TableColgroup },
   name: 'ElTableHeader',

@@ -15,7 +15,11 @@
         <slot name="append"></slot>
       </div>
     </div>
-    <div class="el-table__footer-wrapper" v-if="showSummary" v-show="data && data.length > 0">
+    <div
+      class="el-table__footer-wrapper"
+      v-if="showSummary"
+      v-show="data && data.length > 0"
+    >
       <table-footer :store="store" />
     </div>
     <div class="el-table__fixed" v-if="fixedColumns.length">
@@ -26,7 +30,11 @@
         <table-body fixed="left" />
         <div class="el-table__append-gutter" v-if="$slots.append"></div>
       </div>
-      <div class="el-table__fixed-footer-wrapper" v-if="showSummary" v-show="data && data.length > 0">
+      <div
+        class="el-table__fixed-footer-wrapper"
+        v-if="showSummary"
+        v-show="data && data.length > 0"
+      >
         <table-footer fixed="left" />
       </div>
     </div>
@@ -38,21 +46,30 @@
         <table-body fixed="right" />
         <div class="el-table__append-gutter" v-if="$slots.append"></div>
       </div>
-      <div class="el-table__fixed-footer-wrapper" v-if="showSummary" v-show="data && data.length > 0">
+      <div
+        class="el-table__fixed-footer-wrapper"
+        v-if="showSummary"
+        v-show="data && data.length > 0"
+      >
         <table-footer fixed="right" />
       </div>
     </div>
-    <div class="el-table__fixed-right-patch" v-if="fixedRightColumns.length"></div>
-    <div class="el-table__column-resize-proxy" v-show="resizeProxyVisible"></div>
+    <div
+      class="el-table__fixed-right-patch"
+      v-if="fixedRightColumns.length"
+    ></div>
+    <div
+      class="el-table__column-resize-proxy"
+      v-show="resizeProxyVisible"
+    ></div>
   </div>
 </template>
 
 <script>
+import { useTableState } from './utils'
 import TableBody from './TableBody.vue'
 import TableHeader from './TableHeader.vue'
 import TableFooter from './TableFooter.vue'
-import useTableState from './useTableState'
-import { computed, Fragment, reactive } from 'vue'
 
 export default {
   components: {
@@ -64,12 +81,12 @@ export default {
   name: 'ElTable',
 
   props: {
-    data: { type: Array, default: () => [] },
-    size: String,
-    width: [String, Number],
-    height: [String, Number],
-    maxHeight: [String, Number],
-    fit: { type: Boolean, default: true },
+    data: { type: Array, default: () => [] }, // done
+    size: String, // TODO
+    width: [String, Number], // TODO
+    height: [String, Number], // TODO
+    maxHeight: [String, Number], // TODO
+    fit: { type: Boolean, default: true }, // TODO
     stripe: Boolean,
     border: Boolean,
     rowKey: [String, Function],
@@ -95,39 +112,16 @@ export default {
     spanMethod: Function,
     selectOnIndeterminate: { type: Boolean, default: true },
     indent: { type: Number, default: 16 },
-    treeProps: { type: Object, default: () => ({ hasChildren: 'hasChildren', children: 'children' }) },
+    treeProps: {
+      type: Object,
+      default: () => ({ hasChildren: 'hasChildren', children: 'children' })
+    },
     lazy: Boolean,
     load: Function
   },
 
   setup(props, context) {
-    const state = reactive({})
-    context.slots.default
-
-    state.fixedRightColumns = computed(() => 0)
-    state.fixedColumns = computed(() => 0)
-
-    state.props = computed(() => props)
-    state.data = computed(() => props.data)
-    state.rawColumns = computed(() => {
-      const slot = context.slots.default
-      return slot ? slot() : []
-    })
-    state.columns = computed(() => {
-      const array = state.rawColumns.concat()
-      for (let i = 0; i < array.length; ) {
-        if (array[i].type === Fragment) {
-          array.splice(i, 1, ...array[i].children)
-        } else {
-          i++
-        }
-      }
-      return array
-    })
-
-    useTableState(state)
-
-    return state
+    return useTableState(props, context)
   }
 }
 </script>

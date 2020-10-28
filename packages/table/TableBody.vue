@@ -2,18 +2,21 @@
   <table class="el-table__body" cellspacing="0" cellpadding="0" border="0">
     <table-colgroup></table-colgroup>
     <tbody>
-      <tr v-for="row in data" :key="row.id">
-        <td v-for="col in columns" :key="col.id">{{ row[col.props.prop] }}</td>
-      </tr>
+      <table-row v-for="row in state.tableData" :key="row.id" :data="row" />
     </tbody>
   </table>
 </template>
 
 <script>
-import TableColgroup from './TableColgroup'
-import useTableState from './useTableState'
+import TableRow from './TableRow'
+import TableColgroup from './TableColgroup.vue'
+import { useTableState } from './utils'
+
 export default {
-  components: { TableColgroup },
+  components: {
+    TableRow,
+    TableColgroup
+  },
   name: 'ElTableBody',
 
   setup() {
