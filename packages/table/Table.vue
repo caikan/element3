@@ -1,5 +1,5 @@
 <template>
-  <div class="el-table">
+  <div :class="classes">
     <div class="hidden-columns"><slot></slot></div>
     <div class="el-table__header-wrapper" v-if="showHeader">
       <table-header />
@@ -66,11 +66,11 @@
 </template>
 
 <script>
-import { useTableStore } from './utils'
+import { tableColumnLevelSymbol, useTableStore } from './utils'
 import TableBody from './TableBody.vue'
 import TableHeader from './TableHeader.vue'
 import TableFooter from './TableFooter.vue'
-import { watchEffect } from 'vue'
+import { provide } from 'vue'
 
 export default {
   components: {
@@ -122,6 +122,7 @@ export default {
   },
 
   setup(props, context) {
+    provide(tableColumnLevelSymbol, 0)
     return useTableStore(props, context)
   }
 }

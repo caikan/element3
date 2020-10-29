@@ -10,14 +10,23 @@
     <el-button @click="col++">动态增加列</el-button>
     <el-button @click="addRow">动态增加行</el-button>
     <el-switch v-model="stripe" active-text="斑马纹" />
+    <el-switch v-model="border" active-text="边框" />
+    <el-form inline>
+      <el-form-item label="height">
+        <el-input v-model="height" placeholder="height" />
+      </el-form-item>
+    </el-form>
     <el-table
+      style="width: 100%"
       :stripe="stripe"
+      :border="border"
       :data="tableData"
-      style="width: 100%">
+      :height="height"
+    >
       <el-table-column prop="date" label="日期" width="180"></el-table-column>
       <el-table-column prop="name" label="姓名" width="180"></el-table-column>
       <el-table-column prop="address" label="地址"></el-table-column>
-      <el-table-column v-for="i in col" :key="i" prop="name" :label="'动态列'+i"></el-table-column>
+      <el-table-column v-for="i in col" :key="i" prop="name" :label="'xxxxxxxxxxxxxxxx动态列'+i"></el-table-column>
     </el-table>
   </template>
 
@@ -52,6 +61,8 @@
         }
 
         const stripe = state.stripe = ref(false)
+        const border = state.border = ref(false)
+        const height = state.height = ref()
 
         return state
       }
@@ -750,6 +761,191 @@
           address: '上海市普陀区金沙江路 1518 弄',
           zip: 200333
         }]
+      }
+    }
+  }
+</script>
+```
+:::
+
+
+### 多级表头
+
+数据结构比较复杂的时候，可使用多级表头来展现数据的层次关系。
+
+:::demo 只需要在 el-table-column 里面嵌套 el-table-column，就可以实现多级表头。
+```html
+<template>
+  <el-table
+    :data="tableData"
+    style="width: 100%">
+    <el-table-column
+      prop="date"
+      label="日期"
+      width="150">
+    </el-table-column>
+    <el-table-column label="配送信息">
+      <el-table-column
+        prop="name"
+        label="姓名"
+        width="120">
+      </el-table-column>
+      <el-table-column label="地址">
+        <el-table-column
+          prop="province"
+          label="省份"
+          width="120">
+        </el-table-column>
+        <el-table-column
+          prop="city"
+          label="市区"
+          width="120">
+        </el-table-column>
+        <el-table-column
+          prop="address"
+          label="地址"
+          width="300">
+        </el-table-column>
+        <el-table-column
+          prop="zip"
+          label="邮编"
+          width="120">
+        </el-table-column>
+      </el-table-column>
+    </el-table-column>
+  </el-table>
+</template>
+
+<script>
+  export default {
+    data() {
+      return {
+        tableData: [{
+          date: '2016-05-03',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }, {
+          date: '2016-05-02',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }, {
+          date: '2016-05-04',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }, {
+          date: '2016-05-01',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }, {
+          date: '2016-05-08',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }, {
+          date: '2016-05-06',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }, {
+          date: '2016-05-07',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        }]
+      }
+    }
+  }
+</script>
+```
+:::
+
+### 单选
+
+选择单行数据时使用色块表示。
+
+:::demo Table 组件提供了单选的支持，只需要配置`highlight-current-row`属性即可实现单选。之后由`current-change`事件来管理选中时触发的事件，它会传入`currentRow`，`oldCurrentRow`。如果需要显示索引，可以增加一列`el-table-column`，设置`type`属性为`index`即可显示从 1 开始的索引号。
+```html
+<template>
+  <el-table
+    ref="singleTable"
+    :data="tableData"
+    highlight-current-row
+    @current-change="handleCurrentChange"
+    style="width: 100%">
+    <el-table-column
+      type="index"
+      width="50">
+    </el-table-column>
+    <el-table-column
+      property="date"
+      label="日期"
+      width="120">
+    </el-table-column>
+    <el-table-column
+      property="name"
+      label="姓名"
+      width="120">
+    </el-table-column>
+    <el-table-column
+      property="address"
+      label="地址">
+    </el-table-column>
+  </el-table>
+  <div style="margin-top: 20px">
+    <el-button @click="setCurrent(tableData[1])">选中第二行</el-button>
+    <el-button @click="setCurrent()">取消选择</el-button>
+  </div>
+</template>
+
+<script>
+  export default {
+    data() {
+      return {
+        tableData: [{
+          date: '2016-05-02',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-04',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1517 弄'
+        }, {
+          date: '2016-05-01',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1519 弄'
+        }, {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        }],
+        currentRow: null
+      }
+    },
+
+    methods: {
+      setCurrent(row) {
+        this.$refs.singleTable.setCurrentRow(row);
+      },
+      handleCurrentChange(val) {
+        this.currentRow = val;
       }
     }
   }

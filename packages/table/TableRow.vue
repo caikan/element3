@@ -1,5 +1,5 @@
 <template>
-  <tr :class="classes">
+  <tr :class="getClass()">
     <table-cell
       v-for="column in state.columns"
       :key="column.id"

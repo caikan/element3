@@ -1,4 +1,4 @@
-import { computed, reactive, watch, watchEffect } from 'vue'
+import { computed, reactive } from 'vue'
 import { useTableStore } from './utils'
 
 export default function createTableRowStore(props, context) {
@@ -7,22 +7,29 @@ export default function createTableRowStore(props, context) {
   const row = store
   Object.assign(store, { props, context, row })
 
-  store.getRowClass = computed(() => {
+  // 返回一个getter和computed哪个性能更好？
+  store.getClass = computed(() => {
     const classes = ['el-table__row']
     const { rowClassName, stripe } = table.props
+    const { data, index } = row.props
+
     if (typeof rowClassName === 'string') {
       classes.push(rowClassName)
     }
 
-    const { row, rowIndex } = store.props
+    const isFunction = typeof rowClassName === 'function'
+
     if (stripe) {
       const striped = [classes, classes.concat('el-table__row--striped')]
-      return typeof rowClassName === 'function'
-        ? () => striped[rowIndex % 2].concat(rowClassName({ row, rowIndex }))
-        : () => striped[rowIndex % 2]
+      return isFunction
+        ? () =>
+            striped[index % 2].concat(
+              rowClassName({ row: data, rowIndex: index })
+            )
+        : () => striped[index % 2]
     } else {
-      return typeof rowClassName === 'function'
-        ? (row, rowIndex) => classes.concat(rowClassName({ row, rowIndex }))
+      return isFunction
+        ? () => classes.concat(rowClassName({ row: data, rowIndex: index }))
         : () => classes
     }
   })
@@ -34,7 +41,8 @@ export default function createTableRowStore(props, context) {
       'el-table__row',
       !!stripe && index % 2 === 1 && 'el-table__row--striped',
       typeof rowClassName === 'string' && rowClassName,
-      typeof rowClassName === 'function' && rowClassName(data, index)
+      typeof rowClassName === 'function' &&
+        rowClassName({ row: data, rowIndex: index })
     ]
   })
 

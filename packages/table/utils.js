@@ -10,6 +10,15 @@ import createTableCellStore from './createTableCellStore'
 const tableStoreSymbol = Symbol('tableStoreSymbol')
 const tableRowStoreSymbol = Symbol('tableRowStoreSymbol')
 const tableCellStoreSymbol = Symbol('tableCellStoreSymbol')
+const tableColumnLevelSymbol = Symbol('tableColumnLevelSymbol')
+
+export function useTableColumnLevel(level = void 0) {
+  if (level === void 0) {
+    level = inject(tableColumnLevelSymbol)
+  }
+  provide(tableCellStoreSymbol, +level + 1)
+  return level
+}
 
 export function useStore(createStore, type, symbol, props, context) {
   if (!props || !context || getCurrentInstance().type !== type) {

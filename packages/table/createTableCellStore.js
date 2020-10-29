@@ -3,12 +3,13 @@ import { useTableRowStore } from './utils'
 
 export default function createTableCellStore(props, context) {
   const row = useTableRowStore()
-  const state = reactive(Object.create(row))
-  Object.assign(state, { props, context, cell: state })
+  const store = reactive(Object.create(row))
+  const cell = store
+  Object.assign(store, { props, context, cell })
 
-  state.content = computed(() => {
+  store.content = computed(() => {
     return row.props.data[props.column.props.prop]
   })
 
-  return state
+  return store
 }
