@@ -70,6 +70,7 @@ import { useTableStore } from './utils'
 import TableBody from './TableBody.vue'
 import TableHeader from './TableHeader.vue'
 import TableFooter from './TableFooter.vue'
+import { watchEffect } from 'vue'
 
 export default {
   components: {
@@ -121,7 +122,6 @@ export default {
   },
 
   setup(props, context) {
-    console.log(/table stripe/, props.stripe)
     return useTableStore(props, context)
   }
 }

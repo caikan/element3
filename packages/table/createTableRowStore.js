@@ -1,4 +1,4 @@
-import { computed, reactive } from 'vue'
+import { computed, reactive, watch, watchEffect } from 'vue'
 import { useTableStore } from './utils'
 
 export default function createTableRowStore(props, context) {
@@ -30,12 +30,6 @@ export default function createTableRowStore(props, context) {
   store.classes = computed(() => {
     const { rowClassName, stripe } = table.props
     const { data, index } = row.props
-    console.log(/stripeeeee/, stripe, !!stripe, [
-      'el-table__row',
-      !!stripe && index % 2 === 1 && 'el-table__row--striped',
-      typeof rowClassName === 'string' && rowClassName,
-      typeof rowClassName === 'function' && rowClassName(data, index)
-    ])
     return [
       'el-table__row',
       !!stripe && index % 2 === 1 && 'el-table__row--striped',

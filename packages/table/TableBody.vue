@@ -2,7 +2,12 @@
   <table class="el-table__body" cellspacing="0" cellpadding="0" border="0">
     <table-colgroup></table-colgroup>
     <tbody>
-      <table-row v-for="row in state.tableData" :key="row.id" :data="row" />
+      <table-row
+        v-for="(row, i) in state.tableData"
+        :key="row.keyTODO"
+        :data="row"
+        :index="i"
+      />
     </tbody>
   </table>
 </template>

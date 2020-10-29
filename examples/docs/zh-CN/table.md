@@ -9,8 +9,9 @@
   <template>
     <el-button @click="col++">动态增加列</el-button>
     <el-button @click="addRow">动态增加行</el-button>
+    <el-switch v-model="stripe" active-text="斑马纹" />
     <el-table
-      :stripe="true"
+      :stripe="stripe"
       :data="tableData"
       style="width: 100%">
       <el-table-column prop="date" label="日期" width="180"></el-table-column>
@@ -24,8 +25,11 @@
     import { ref , reactive } from 'vue'
     export default {
       setup() {
-        const col = ref(0)
-        const tableData = reactive([{
+        const state = {}
+
+        const col = state.col = ref(0)
+
+        const tableData = state.tableData = reactive([{
             date: '2016-05-02',
             name: '王小虎',
             address: '上海市普陀区金沙江路 1518 弄'
@@ -43,11 +47,13 @@
             address: '上海市普陀区金沙江路 1516 弄'
           }])
 
-        function addRow() {
+        state.addRow = function addRow() {
           tableData.push(tableData[tableData.length-4])
         }
 
-        return {col, tableData, addRow}
+        const stripe = state.stripe = ref(false)
+
+        return state
       }
     }
   </script>
