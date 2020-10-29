@@ -10,7 +10,7 @@
 <script>
 import TableRow from './TableRow'
 import TableColgroup from './TableColgroup.vue'
-import { useTableState } from './utils'
+import { useTableStore } from './utils'
 
 export default {
   components: {
@@ -20,7 +20,7 @@ export default {
   name: 'ElTableBody',
 
   setup() {
-    return useTableState()
+    return useTableStore()
   }
 }
 </script>

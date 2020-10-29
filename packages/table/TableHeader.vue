@@ -13,13 +13,13 @@
 
 <script>
 import TableColgroup from './TableColgroup'
-import { useTableState } from './utils'
+import { useTableStore } from './utils'
 export default {
   components: { TableColgroup },
   name: 'ElTableHeader',
 
   setup() {
-    return useTableState()
+    return useTableStore()
   }
 }
 </script>

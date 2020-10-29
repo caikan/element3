@@ -5,12 +5,12 @@
 </template>
 
 <script>
-import { useTableState } from './utils'
+import { useTableStore } from './utils'
 export default {
   name: 'ElTableColgroup',
 
   setup() {
-    return useTableState()
+    return useTableStore()
   }
 }
 </script>

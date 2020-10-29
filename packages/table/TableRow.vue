@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { useTableRowState } from './utils'
+import { useTableRowStore } from './utils'
 import TableCell from './TableCell'
 export default {
   components: { TableCell },
@@ -19,7 +19,7 @@ export default {
     index: Number
   },
   setup(props, context) {
-    return useTableRowState(props, context)
+    return useTableRowStore(props, context)
   }
 }
 </script>

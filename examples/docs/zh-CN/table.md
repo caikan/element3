@@ -10,6 +10,7 @@
     <el-button @click="col++">动态增加列</el-button>
     <el-button @click="addRow">动态增加行</el-button>
     <el-table
+      :stripe="true"
       :data="tableData"
       style="width: 100%">
       <el-table-column prop="date" label="日期" width="180"></el-table-column>

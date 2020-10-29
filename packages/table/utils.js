@@ -3,39 +3,39 @@ import { getCurrentInstance, inject, provide } from 'vue'
 import Table from './Table'
 import TableRow from './TableRow'
 import TableCell from './TableCell'
-import createTableState from './createTableState'
-import createTableRowState from './createTableRowState'
-import createTableCellState from './createTableCellState'
+import createTableStore from './createTableStore'
+import createTableRowStore from './createTableRowStore'
+import createTableCellStore from './createTableCellStore'
 
-const tableStateSymbol = Symbol('tableStateSymbol')
-const tableRowStateSymbol = Symbol('tableRowStateSymbol')
-const tableCellStateSymbol = Symbol('tableCellStateSymbol')
+const tableStoreSymbol = Symbol('tableStoreSymbol')
+const tableRowStoreSymbol = Symbol('tableRowStoreSymbol')
+const tableCellStoreSymbol = Symbol('tableCellStoreSymbol')
 
-export function useState(createState, type, symbol, props, context) {
+export function useStore(createStore, type, symbol, props, context) {
   if (!props || !context || getCurrentInstance().type !== type) {
     return inject(symbol)
   }
-  const state = createState(props, context)
+  const state = createStore(props, context)
   state.state = state
   provide(symbol, state)
   return state
 }
 
-export const useTableState = useState.bind(
+export const useTableStore = useStore.bind(
   null,
-  createTableState,
+  createTableStore,
   Table,
-  tableStateSymbol
+  tableStoreSymbol
 )
-export const useTableRowState = useState.bind(
+export const useTableRowStore = useStore.bind(
   null,
-  createTableRowState,
+  createTableRowStore,
   TableRow,
-  tableRowStateSymbol
+  tableRowStoreSymbol
 )
-export const useTableCellState = useState.bind(
+export const useTableCellStore = useStore.bind(
   null,
-  createTableCellState,
+  createTableCellStore,
   TableCell,
-  tableCellStateSymbol
+  tableCellStoreSymbol
 )

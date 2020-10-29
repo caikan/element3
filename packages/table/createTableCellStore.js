@@ -1,8 +1,8 @@
 import { computed, reactive } from 'vue'
-import { useTableRowState } from './utils'
+import { useTableRowStore } from './utils'
 
-export default function createTableCellState(props, context) {
-  const row = useTableRowState()
+export default function createTableCellStore(props, context) {
+  const row = useTableRowStore()
   const state = reactive(Object.create(row))
   Object.assign(state, { props, context, cell: state })
 

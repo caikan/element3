@@ -1,19 +1,20 @@
 import { computed, reactive } from 'vue'
-import { useTableState } from './utils'
+import { useTableStore } from './utils'
 
-export default function createTableRowState(props, context) {
-  const table = useTableState()
-  const state = reactive(Object.create(table))
-  Object.assign(state, { props, context, row: state })
+export default function createTableRowStore(props, context) {
+  const table = useTableStore()
+  const store = reactive(Object.create(table))
+  const row = store
+  Object.assign(store, { props, context, row })
 
-  state.getRowClass = computed(() => {
+  store.getRowClass = computed(() => {
     const classes = ['el-table__row']
     const { rowClassName, stripe } = table.props
     if (typeof rowClassName === 'string') {
       classes.push(rowClassName)
     }
 
-    const { row, rowIndex } = state.props
+    const { row, rowIndex } = store.props
     if (stripe) {
       const striped = [classes, classes.concat('el-table__row--striped')]
       return typeof rowClassName === 'function'
@@ -26,9 +27,15 @@ export default function createTableRowState(props, context) {
     }
   })
 
-  state.classes = computed(() => {
+  store.classes = computed(() => {
     const { rowClassName, stripe } = table.props
-    const { data, index } = state.props
+    const { data, index } = row.props
+    console.log(/stripeeeee/, stripe, !!stripe, [
+      'el-table__row',
+      !!stripe && index % 2 === 1 && 'el-table__row--striped',
+      typeof rowClassName === 'string' && rowClassName,
+      typeof rowClassName === 'function' && rowClassName(data, index)
+    ])
     return [
       'el-table__row',
       !!stripe && index % 2 === 1 && 'el-table__row--striped',
@@ -37,5 +44,5 @@ export default function createTableRowState(props, context) {
     ]
   })
 
-  return state
+  return store
 }

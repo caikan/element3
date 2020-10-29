@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { useTableState } from './utils'
+import { useTableStore } from './utils'
 import TableBody from './TableBody.vue'
 import TableHeader from './TableHeader.vue'
 import TableFooter from './TableFooter.vue'
@@ -121,7 +121,8 @@ export default {
   },
 
   setup(props, context) {
-    return useTableState(props, context)
+    console.log(/table stripe/, props.stripe)
+    return useTableStore(props, context)
   }
 }
 </script>
