@@ -5,11 +5,13 @@ import Table from './Table'
 import TableRow from './TableRow'
 import TableCell from './TableCell'
 import TableHeaderRow from './TableHeaderRow'
+import TableHeaderCell from './TableHeaderCell'
 
 import createTableStore from './createTableStore'
 import createTableRowStore from './createTableRowStore'
-import createTableDataCellStore from './createTableDataCellStore'
+import createTableCellStore from './createTableCellStore'
 import createTableHeaderRowStore from './createTableHeaderRowStore'
+import createTableHeaderCellStore from './createTableHeaderCellStore'
 
 // const tableStoreSymbol = Symbol('tableStoreSymbol')
 // const tableRowStoreSymbol = Symbol('tableRowStoreSymbol')
@@ -38,13 +40,18 @@ export const useTableRowStore = useStore.bind(
 )
 export const useTableCellStore = useStore.bind(
   TableCell,
-  createTableDataCellStore,
+  createTableCellStore,
   Symbol('table-data-cell')
 )
 export const useTableHeaderRowStore = useStore.bind(
   TableHeaderRow,
   createTableHeaderRowStore,
   Symbol('table-header-row')
+)
+export const useTableHeaderCellStore = useStore.bind(
+  TableHeaderCell,
+  createTableHeaderCellStore,
+  Symbol('table-header-cell')
 )
 
 export function flatInstances(array) {
@@ -58,7 +65,14 @@ export function flatInstances(array) {
   }, [])
 }
 
+/**
+ * @deprecated
+ */
 const getEmptyPlugins = () => []
+
+/**
+ * @deprecated
+ */
 export function getFlatPlugins(slots, name) {
   const getter = slots[name] || getEmptyPlugins
   return getter().reduce((prev, val) => {
@@ -69,4 +83,40 @@ export function getFlatPlugins(slots, name) {
     }
     return prev
   }, [])
+}
+
+/**
+ * @deprecated
+ */
+export function getPlugins1(slots, name, type) {
+  const getter = slots[name] || getEmptyPlugins
+  const plugins = getter()
+  for (let i = 0; i < plugins.length; void 0) {
+    const plugin = plugins[i]
+    if (plugin.type === Fragment) {
+      plugins.splice(i, 1, ...plugin.children)
+    } else {
+      if (!type || plugin.type === type) {
+        plugins[i] = plugin
+      }
+      i++
+    }
+  }
+  return plugins
+}
+
+export function getPlugins(getter, type) {
+  const plugins = (getter || Array)()
+  for (let i = 0; i < plugins.length; void 0) {
+    const plugin = plugins[i]
+    if (plugin.type === Fragment) {
+      plugins.splice(i, 1, ...plugin.children)
+    } else {
+      if (!type || plugin.type === type) {
+        plugins[i] = plugin
+      }
+      i++
+    }
+  }
+  return plugins
 }

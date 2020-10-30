@@ -3,12 +3,7 @@
     <table>
       <table-colgroup></table-colgroup>
       <thead>
-        <table-header-row v-for="i in headerRowCount" :key="i" />
-        <!-- <tr>
-          <th v-for="col in columns" :key="col.key">
-            <div>{{ col.props.label }}</div>
-          </th>
-        </tr> -->
+        <table-header-row v-for="(row, i) in headerRows" :key="i" :index="i" />
       </thead>
     </table>
   </div>

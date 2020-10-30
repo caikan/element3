@@ -1,9 +1,9 @@
 <template>
-  <td>{{ content }}</td>
+  <th :colspan="colSpan" :rowspan="rowSpan">{{ content }}</th>
 </template>
 
 <script>
-import { useTableCellStore } from './utils'
+import { useTableHeaderCellStore } from './utils'
 export default {
   name: 'ElTableHeaderCell',
   props: {
@@ -13,7 +13,7 @@ export default {
     // const s = useTableCellStore(props, context)
     // console.log(/cecll/, s)
     // return s
-    return useTableCellStore(props, context)
+    return useTableHeaderCellStore(props, context)
   }
 }
 </script>

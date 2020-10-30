@@ -1,10 +1,6 @@
 <template>
   <tr :class="getClass()">
-    <table-cell
-      v-for="column in state.columns"
-      :key="column.id"
-      :column="column"
-    />
+    <table-cell v-for="cell in cells" :key="cell.id" :cell="cell" />
   </tr>
 </template>
 

@@ -1,26 +1,29 @@
 import { computed, reactive } from 'vue'
-import { useTableRowStore } from './utils'
+import { useTableHeaderRowStore } from './utils'
 
 export default function createTableHeaderCellStore(props, context) {
-  const tableRowStore = useTableRowStore()
-  const tableStore = tableRowStore.tableStore
-  const tableHeaderCellStore = reactive(Object.create(tableRowStore))
+  const tableHeaderRowStore = useTableHeaderRowStore()
+  const tableStore = tableHeaderRowStore.tableStore
+  const tableHeaderCellStore = reactive(Object.create(tableHeaderRowStore))
   Object.assign(tableHeaderCellStore, {
     props,
     context,
     tableStore,
-    tableRowStore,
+    tableHeaderRowStore,
     tableHeaderCellStore
   })
 
-  tableHeaderCellStore.data = computed(() => {
-    return tableRowStore.props.row[props.column.props.prop]
+  tableHeaderCellStore.content = computed(() => {
+    // TODO
+    return tableHeaderRowStore.props.row[props.column.props.prop]
   })
 
   tableHeaderCellStore.rowSpan = computed(() => {
+    // TODO
     return 1
   })
   tableHeaderCellStore.colSpan = computed(() => {
+    // TODO
     return 1
   })
 

@@ -3,8 +3,8 @@
     <table-colgroup></table-colgroup>
     <tbody>
       <table-row
-        v-for="(row, i) in state.tableData"
-        :key="row.keyTODO"
+        v-for="(row, i) in tableData"
+        :key="i"
         :data="row"
         :index="i"
       />

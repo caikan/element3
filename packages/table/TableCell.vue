@@ -7,7 +7,7 @@ import { useTableCellStore } from './utils'
 export default {
   name: 'ElTableCell',
   props: {
-    column: {}
+    cell: {}
   },
   setup(props, context) {
     // const s = useTableCellStore(props, context)

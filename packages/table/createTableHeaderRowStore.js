@@ -45,5 +45,8 @@ export default function createTableRowStore(props, context) {
     ]
   })
 
+  // TODO
+  tableRowStore.cells = computed(() => {})
+
   return tableRowStore
 }

@@ -1,5 +1,5 @@
 import { computed, reactive } from 'vue'
-import { getFlatPlugins, useTableStore } from './utils'
+import { getPlugins, useTableStore } from './utils'
 import TableColumn from './TableColumn.vue'
 
 export default function createTableColumnStore(props, context) {
@@ -13,6 +13,10 @@ export default function createTableColumnStore(props, context) {
   })
 
   const { slots } = context
+
+  /**
+   * @deprecated
+   */
   tableColumnStore.deep = computed(() => {
     const deeps = getFlatPlugins(slots, 'default')
       .filter((p) => p.type === TableColumn)
@@ -20,14 +24,24 @@ export default function createTableColumnStore(props, context) {
     return Math.max(deeps) + 1
   })
 
-  tableColumnStore.data = computed(() => {
+  tableColumnStore.content = computed(() => {
     return props.label
   })
 
-  tableColumnStore.rowSpan = computed(() => {
-    return 1
+  tableColumnStore.childColumnStores = computed(() => {
+    return getPlugins(slots.default, TableColumn)
   })
+
   tableColumnStore.colSpan = computed(() => {
+    return (
+      tableColumnStore.childColumnStores.reduce(
+        (sum, col) => sum + col.colSpan,
+        0
+      ) || 1
+    )
+  })
+
+  tableColumnStore.rowSpan = computed(() => {
     return 1
   })
 

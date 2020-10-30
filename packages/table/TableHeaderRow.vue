@@ -1,25 +1,25 @@
 <template>
   <tr :class="getClass()">
-    <table-cell
+    <table-header-cell v-for="(cell, i) in cells" :key="i"></table-header-cell>
+    <!-- <table-cell
       v-for="column in state.columns"
       :key="column.id"
       :column="column"
-    />
+    /> -->
   </tr>
 </template>
 
 <script>
-import { useTableRowStore } from './utils'
-import TableCell from './TableCell'
+import TableHeaderCell from './TableHeaderCell'
+import { useTableHeaderRowStore } from './utils'
 export default {
-  components: { TableCell },
-  name: 'ElTableRow',
+  components: { TableHeaderCell },
+  name: 'ElTableHeaderCell',
   props: {
-    data: {},
     index: Number
   },
   setup(props, context) {
-    return useTableRowStore(props, context)
+    return useTableHeaderRowStore(props, context)
   }
 }
 </script>
