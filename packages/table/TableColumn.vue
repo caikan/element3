@@ -2,6 +2,8 @@
 export default {
   name: 'ElTableColumn',
 
-  setup() {}
+  setup(props, context) {
+    return void props, context
+  }
 }
 </script>

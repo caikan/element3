@@ -1,68 +1,35 @@
 import { computed, Fragment, reactive } from 'vue'
+import TableColumn from './TableColumn.vue'
 
-export default function (props, context) {
-  const store = reactive(Object.create({ props, context }))
-  const table = store
-  Object.assign(store, { table })
+export default function createTableStore(props, context) {
+  const tableStore = reactive(Object.create({ props, context }))
+  Object.assign(tableStore, { tableStore })
 
-  table.useTableColumnLevel = (level = void 0) => {
-    if (level === void 0) {
-      level = inject(tableColumnLevelSymbol)
-    }
-    provide(tableCellStoreSymbol, +level + 1)
-    return level
-  }
-
-  store.slotsDefault = computed(() => {
-    const getter = context.slots.default
-    return getter ? getter() : []
-  })
-
-  store.rawColumns = computed(() => {
-    const slot = context.slots.default
-    return slot ? slot() : []
-  })
-
-  store.columns = computed(() => {
-    const array = store.rawColumns.concat()
-    for (let i = 0; i < array.length; ) {
-      if (array[i].type === Fragment) {
-        array.splice(i, 1, ...array[i].children)
+  const { slots } = context
+  tableStore.tableColumnStores = computed(() => {
+    const getPlugins = slots.default
+    const plugins = getPlugins ? getPlugins() : []
+    for (let i = 0; i < plugins.length; void 0) {
+      const plugin = plugins[i]
+      if (plugin.type === TableColumn) {
+        plugins[i++] = plugin.tableColumnStore
       } else {
-        i++
+        const children = plugin.type === Fragment ? plugin.children : []
+        plugins.splice(i, 1, ...children)
       }
     }
-    return array
+    return plugins
   })
 
-  store.fixedRightColumns = computed(() => 0)
-  store.fixedColumns = computed(() => 0)
-  store.tableData = computed(() => props.data)
-
-  /**
-   * @deprecated use `rowState.getClass` instead.
-   */
-  store.getRowClass = computed(() => {
-    const classes = ['el-table__row']
-    const { rowClassName, stripe } = props
-    if (typeof rowClassName === 'string') {
-      classes.push(rowClassName)
-    }
-
-    if (stripe) {
-      const striped = [classes, classes.concat('el-table__row--striped')]
-      return typeof rowClassName === 'function'
-        ? (row, rowIndex) =>
-            striped[rowIndex % 2].concat(rowClassName({ row, rowIndex }))
-        : (row, rowIndex) => striped[rowIndex % 2]
-    } else {
-      return typeof rowClassName === 'function'
-        ? (row, rowIndex) => classes.concat(rowClassName({ row, rowIndex }))
-        : () => classes
-    }
+  tableStore.headerRowCount = computed(() => {
+    return Math.max(...tableStore.tableColumnStore.map((store) => store.deep))
   })
 
-  store.classes = computed(() => {
+  tableStore.fixedRightColumns = computed(() => 0)
+  tableStore.fixedColumns = computed(() => 0)
+  tableStore.tableData = computed(() => props.data)
+
+  tableStore.classes = computed(() => {
     const { fit, stripe, border, isHidden, isGroup, maxHeight } = props
     return [
       'el-table',
@@ -77,6 +44,6 @@ export default function (props, context) {
     ]
   })
 
-  store.json = (obj) => JSON.stringify(obj)
-  return store
+  // tableStore.json = (obj) => JSON.stringify(obj)
+  return tableStore
 }

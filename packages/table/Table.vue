@@ -1,9 +1,6 @@
 <template>
   <div :class="classes">
     <div class="hidden-columns"><slot></slot></div>
-    <div class="el-table__header-wrapper" v-if="showHeader">
-      <table-header />
-    </div>
     <div class="el-table__body-wrapper">
       <table-body />
       <div class="el-table__empty-block" v-if="!data || data.length === 0">
@@ -66,11 +63,10 @@
 </template>
 
 <script>
-import { tableColumnLevelSymbol, useTableStore } from './utils'
+import { useTableStore } from './utils'
 import TableBody from './TableBody.vue'
 import TableHeader from './TableHeader.vue'
 import TableFooter from './TableFooter.vue'
-import { provide } from 'vue'
 
 export default {
   components: {
@@ -122,7 +118,6 @@ export default {
   },
 
   setup(props, context) {
-    provide(tableColumnLevelSymbol, 0)
     return useTableStore(props, context)
   }
 }
