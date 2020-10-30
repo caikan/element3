@@ -72,6 +72,7 @@ ComponentNames.forEach((name) => {
   if (
     [
       'table',
+      'table-column',
       'infinite-scroll',
       'loading',
       'image',

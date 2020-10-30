@@ -1,6 +1,8 @@
 <template>
   <div :class="classes">
-    <div class="hidden-columns"><slot></slot></div>
+    <div class="hidden-columns">
+      <slot></slot>
+    </div>
     <div class="el-table__body-wrapper">
       <table-body />
       <div class="el-table__empty-block" v-if="!data || data.length === 0">
@@ -63,6 +65,7 @@
 </template>
 
 <script>
+import TableColumn from './TableColumn'
 import { useTableStore } from './utils'
 import TableBody from './TableBody.vue'
 import TableHeader from './TableHeader.vue'
@@ -70,6 +73,7 @@ import TableFooter from './TableFooter.vue'
 
 export default {
   components: {
+    TableColumn,
     TableHeader,
     TableBody,
     TableFooter

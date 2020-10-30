@@ -1,19 +1,68 @@
-import { computed, Fragment, reactive } from 'vue'
+import {
+  computed,
+  getCurrentInstance,
+  reactive,
+  readonly,
+  ref,
+  watch,
+  watchEffect
+} from 'vue'
 import TableColumn from './TableColumn.vue'
 import { getPlugins } from './utils'
 
 export default function createTableStore(props, context) {
   const tableStore = reactive(Object.create({ props, context }))
-  Object.assign(tableStore, { tableStore })
+  const instance = getCurrentInstance()
+  Object.assign(tableStore, { tableStore, instance })
 
   const { slots } = context
+
+  // console.log(/tableStore/, tableStore)
+  watch(
+    () => getPlugins(slots.default, TableColumn),
+    () => {
+      // console.log(/plugins updated/, instance, plugins)
+      columns.value = []
+    }
+  )
+
+  const columns = ref([])
+  // tableStore.mountColumn = ref((column) => {
+  //   columns.push(column)
+  // })
+  tableStore.mountColumn = computed(() => {
+    return ((columns) => {
+      return (column) => {
+        columns.push(column)
+      }
+    })(columns.value)
+  })
+
+  tableStore.tableColumns = readonly(columns)
+
+  watch(
+    () => columns.value.length,
+    (val) => {
+      console.log(
+        /columns/,
+        columns.value.map((c) => {
+          return c.props.label
+        })
+      )
+    }
+  )
+
   tableStore.flatTableColumnStores = computed(() => {
     const stores = getPlugins(slots.default, TableColumn)
     for (let i = 0; i < stores.length; void 0) {
       const tableColumnStore = stores[i]
-      if (tableColumnStore.childColumnStores.length) {
+      if (
+        tableColumnStore.childColumnStores &&
+        tableColumnStore.childColumnStores.length
+      ) {
         stores.splice(i, 1, tableColumnStore.childColumnStores)
       } else {
+        // console.log(/tableColumnStore/, tableColumnStore)
         i++
       }
     }
@@ -22,58 +71,6 @@ export default function createTableStore(props, context) {
 
   tableStore.headerRowCount = computed(() => {
     return Math.max(...tableStore.tableColumnStores.map((store) => store.deep))
-  })
-
-  /**
-   * @deprecated
-   */
-  tableStore.headerRows__BAD = computed(() => {
-    // const plugins = getPlugins(slots.default, TableColumn)
-    const rows = []
-
-    // let columnPlugins = plugins
-    // while (columnPlugins.length) {
-    //   const nextRowColumnPlugins = []
-    //   const row = columnPlugins.map((plugin) => {
-    //     cell
-    //     return cell
-    //   })
-    // }
-    // for (let i = 0; i < rows.length; i++) {
-    //   const plugins = rows[i]
-    //   const nextRow = []
-    // }
-
-    // const rows = [plugins].reduce((rows, plugins) => {
-
-    // }, [])
-
-    // const rows = []
-    // let lastRow
-    // do {
-
-    // } while (row.length);
-
-    // const rows = [
-    //   [] // cells
-    // ]
-    // const maxDeep = 1
-    // const buildPlugins2CellsReducer = (deep = 1) => {
-    //   return (cells, plugin) => {
-    //     const childPlugins = getPlugins(plugin.slots.default, TableColumn)
-    //     const cell = { colSpan: 1, rowSpan: 1 }
-    //     if (!childPlugins.length) {
-    //       cell.rowSpan = childPlugins.xxx
-    //     }
-    //   }
-    // }
-    // plugins.reduce((cells, plugin) => {
-    //   const childPlugins = getPlugins(plugin.slots.default, TableColumn)
-    //   return cells
-    // }, [])
-    // const cells = tableStore.tableColumnStores.forEach((store) => {})
-
-    return rows
   })
 
   tableStore.headerRows = computed(() => {
@@ -90,13 +87,6 @@ export default function createTableStore(props, context) {
       rowColumns = nextRowColumns
     }
     return rows
-  })
-
-  tableStore.tableBodyColumns = computed(() => {
-    const columns = getPlugins(slots.default, TableColumn)
-    for (let i = 0; i < columns.length; i++) {
-      const column = columns[i]
-    }
   })
 
   tableStore.fixedRightColumns = computed(() => 0)

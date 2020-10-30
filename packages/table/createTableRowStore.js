@@ -45,7 +45,11 @@ export default function createTableRowStore(props, context) {
     ]
   })
 
-  tableRowStore.cells = computed(() => {})
+  tableRowStore.cells = computed(() => {
+    tableStore.flatTableColumnStores.map((tableColumnStore) => {
+      return { tableColumnStore }
+    })
+  })
 
   return tableRowStore
 }

@@ -1,4 +1,4 @@
-import { computed, reactive } from 'vue'
+import { computed, reactive, watch, watchEffect } from 'vue'
 import { getPlugins, useTableStore } from './utils'
 import TableColumn from './TableColumn.vue'
 
@@ -14,15 +14,26 @@ export default function createTableColumnStore(props, context) {
 
   const { slots } = context
 
-  /**
-   * @deprecated
-   */
-  tableColumnStore.deep = computed(() => {
-    const deeps = getFlatPlugins(slots, 'default')
-      .filter((p) => p.type === TableColumn)
-      .map((p) => p.deep)
-    return Math.max(deeps) + 1
-  })
+  watch(
+    () => tableStore.mountColumn,
+    (mount) => {
+      console.log(/mount/, props.label)
+      mount(tableColumnStore)
+    }
+  )
+  // watchEffect(() => {
+  //   tableStore.mountColumn()
+  // })
+
+  // /**
+  //  * @deprecated
+  //  */
+  // tableColumnStore.deep = computed(() => {
+  //   const deeps = getFlatPlugins(slots, 'default')
+  //     .filter((p) => p.type === TableColumn)
+  //     .map((p) => p.deep)
+  //   return Math.max(deeps) + 1
+  // })
 
   tableColumnStore.content = computed(() => {
     return props.label

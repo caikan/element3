@@ -2,12 +2,14 @@ import { Fragment, getCurrentInstance, inject, provide } from 'vue'
 
 // 请确保本模块 utils.js 在组件模块之前加载，否则此处引入的组件可能为undefined
 import Table from './Table'
+import TableColumn from './TableColumn'
 import TableRow from './TableRow'
 import TableCell from './TableCell'
 import TableHeaderRow from './TableHeaderRow'
 import TableHeaderCell from './TableHeaderCell'
 
 import createTableStore from './createTableStore'
+import createTableColumnStore from './createTableColumnStore'
 import createTableRowStore from './createTableRowStore'
 import createTableCellStore from './createTableCellStore'
 import createTableHeaderRowStore from './createTableHeaderRowStore'
@@ -32,6 +34,11 @@ export const useTableStore = useStore.bind(
   Table,
   createTableStore,
   Symbol('table')
+)
+export const useTableColumnStore = useStore.bind(
+  TableColumn,
+  createTableColumnStore,
+  Symbol('table-column')
 )
 export const useTableRowStore = useStore.bind(
   TableRow,

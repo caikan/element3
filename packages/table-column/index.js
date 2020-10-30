@@ -1,4 +1,5 @@
-import ElTableColumn from '../table/src/table-column'
+import '../table/utils'
+import ElTableColumn from '../table/TableColumn.vue'
 
 /* istanbul ignore next */
 ElTableColumn.install = function (app) {
